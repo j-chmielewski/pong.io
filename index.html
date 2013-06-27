@@ -1,62 +1,73 @@
 <html>
   <head>
-    <script src="raphael.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
   </head>
   
   <body>
-    
-    <div id="canvas_container"></div>
-    
     <script type="text/javascript">
+      var player = 0;
+
       // Config
       var pWidth = 800;
       var pHeight = 500;
-
+      
       var p1Color = "#4f23cf";
       var p2Color = "#cf2323";
-
+      
       var ballColor = "#37cf23";
       var ballRadius = 20;
-
+      
       // Create canvas
       var paper = Raphael(0, 0, pWidth, pHeight);
       
       // Create players and ball
       var p1 = paper.rect(0, pHeight/2 - 50, 20, 100, 5);
       p1.attr("fill", p1Color);
-
+      
       var p2 = paper.rect(pWidth - 20, pHeight/2 - 50, 20, 100, 5);
       p2.attr("fill", p2Color);
 
+      var players = [p1, p2];
+      
       var ball = paper.circle(pWidth/2, pHeight/2, ballRadius);
       ball.attr("fill", ballColor);
-
-
-/*
-      // Sets the fill attribute of the circle to red (#f00)
-      circle1.attr("fill", "#f00");
-      circle1.attr("fill-opacity", 0.3);
-      circle1.attr("stroke", "#00f");
-      circle1.attr("stroke-opacity", 0.3);
-      circle1.attr("stroke-width", 5);
       
-      var circle2 = paper.circle(300, 100, 50);
-      // Sets the fill attribute of the circle to red (#f00)
-      circle2.attr("fill", "#f00");
-      circle2.attr("fill-opacity", 0.3);
-      circle2.attr("stroke", "#00f");
-      circle2.attr("stroke-opacity", 0.3);
-      circle2.attr("stroke-width", 5);
-      
-      c1State = true;
-      circle1.mouseover(function() {
+      // Socket
+      var socket = io.connect('http://localhost:8080');
+      socket.on('connect', function(){
+	  
+	  socket.on('player-number', function(data) {
+	      player = data;
+	  });
 
-      var r = c1State? 10 : 50;
-      var animation = Raphael.animation({r: r}, 1000, "bounce");
-      circle1.animate(animation);
-      c1State = !c1State;
+	  socket.on('opponents-position', function(data) {
+	      players[(player + 1) % 2].attr("y", data);
+	  });
+
+	  socket.on('ball-position', function (data) {
+	      ball.attr("cx", data.x);
+	      ball.attr("cy", data.y);
+	  });
+
+	  socket.on('opponent-disconnected', function() {
+	      alert('Opponent disconnected');
+	  });
       });
-*/
+
+      // Mouse tracking
+      (function() {
+	  window.onmousemove = handleMouseMove;
+	  function handleMouseMove(event) {
+	      event = event || window.event; // IE-ism
+	      // event.clientX and event.clientY contain the mouse position
+	      var y = event.clientY;
+	      players[player].attr("y", y);
+	      socket.emit('player-position', y);
+	  }
+      })();
+
+
     </script>
   </body>
 </html>

@@ -1,25 +1,43 @@
 <html>
-<head>
-  <script src="raphael-min.js"></script>
-</head>
-
-<body>
+  <head>
+    <script src="raphael.js"></script>
+  </head>
   
-  <div id="canvas_container"></div>
+  <body>
+    
+    <div id="canvas_container"></div>
+    
+    <script>
+      
+      // Creates canvas 320 × 200 at 10, 50
+      var paper = Raphael(0, 0, 500, 500);
+      
+      // Creates circle at x = 50, y = 50, with radius 10
+      var circle1 = paper.circle(100, 100, 50);
+      // Sets the fill attribute of the circle to red (#f00)
+      circle1.attr("fill", "#f00");
+      circle1.attr("fill-opacity", 0.3);
+      circle1.attr("stroke", "#00f");
+      circle1.attr("stroke-opacity", 0.3);
+      circle1.attr("stroke-width", 5);
+      
+      var circle2 = paper.circle(300, 100, 50);
+      // Sets the fill attribute of the circle to red (#f00)
+      circle2.attr("fill", "#f00");
+      circle2.attr("fill-opacity", 0.3);
+      circle2.attr("stroke", "#00f");
+      circle2.attr("stroke-opacity", 0.3);
+      circle2.attr("stroke-width", 5);
+      
+      c1State = true;
+      circle1.mouseover(function() {
 
-  <script>
+      var r = c1State? 10 : 50;
+      var animation = Raphael.animation({r: r}, 1000, "bounce");
+      circle1.animate(animation);
+      c1State = !c1State;
+      });
 
-    window.onload = function() {  
-    var paper = new Raphael(document.getElementById('canvas_container'), 500, 500);  
-    var tetronimo = paper.path("M 250 250 l 0 -50 l -50 0 l 0 -50 l -100 0 l 0 50 l 50 0 l 0 50 z");  
-    tetronimo.attr({  
-        stroke: 'none',  
-        fill: 'blue'  
-    }); 
-    tetronimo.animate({  
-    path: "M 250 250 l 0 -50 l -50 0 l 0 -50 l -100 0 l 0 50 l 50 0 l 0 50 z"  
-}, 5000, 'elastic');  
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>

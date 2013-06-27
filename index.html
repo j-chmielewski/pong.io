@@ -7,13 +7,32 @@
     
     <div id="canvas_container"></div>
     
-    <script>
+    <script type="text/javascript">
+      // Config
+      var pWidth = 800;
+      var pHeight = 500;
+
+      var p1Color = "#4f23cf";
+      var p2Color = "#cf2323";
+
+      var ballColor = "#37cf23";
+      var ballRadius = 20;
+
+      // Create canvas
+      var paper = Raphael(0, 0, pWidth, pHeight);
       
-      // Creates canvas 320 × 200 at 10, 50
-      var paper = Raphael(0, 0, 500, 500);
-      
-      // Creates circle at x = 50, y = 50, with radius 10
-      var circle1 = paper.circle(100, 100, 50);
+      // Create players and ball
+      var p1 = paper.rect(0, pHeight/2 - 50, 20, 100, 5);
+      p1.attr("fill", p1Color);
+
+      var p2 = paper.rect(pWidth - 20, pHeight/2 - 50, 20, 100, 5);
+      p2.attr("fill", p2Color);
+
+      var ball = paper.circle(pWidth/2, pHeight/2, ballRadius);
+      ball.attr("fill", ballColor);
+
+
+/*
       // Sets the fill attribute of the circle to red (#f00)
       circle1.attr("fill", "#f00");
       circle1.attr("fill-opacity", 0.3);
@@ -37,7 +56,7 @@
       circle1.animate(animation);
       c1State = !c1State;
       });
-
+*/
     </script>
   </body>
 </html>

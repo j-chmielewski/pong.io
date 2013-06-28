@@ -17,6 +17,8 @@
       
       var ballColor = "#37cf23";
       var ballRadius = 20;
+
+      var server = '10.100.10.142:8080';
       
       // Create canvas
       var paper = Raphael(0, 0, pWidth, pHeight);
@@ -34,7 +36,7 @@
       ball.attr("fill", ballColor);
       
       // Socket
-      var socket = io.connect('http://localhost:8080');
+      var socket = io.connect(server);
       socket.on('connect', function(){
 	  
 	  socket.on('player-number', function(data) {

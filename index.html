@@ -55,6 +55,13 @@
 	  socket.on('opponent-disconnected', function() {
 	      alert('Opponent disconnected');
 	  });
+
+  	  socket.on('squish', function() {
+	      var anim = Raphael.animation({r: ballRadius}, 500, "bounce");
+	      ball.attr('r', ballRadius - 5);
+	      ball.animate(anim);
+	  });
+
       });
 
       // Mouse tracking

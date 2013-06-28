@@ -86,6 +86,7 @@ io.sockets.on('connection', function (socket) {
 		} 
 		console.log('positive vector.x');
 		ballVector[0] = Math.abs(ballVector[0]);
+		squish();
 	    }
 	    if(ball.x >= (fieldWidth - playerWidth - ballRadius)) {
 		// player 2 side
@@ -97,16 +98,19 @@ io.sockets.on('connection', function (socket) {
 		} 
 		console.log('negative vector.x');
 		ballVector[0] = -Math.abs(ballVector[0]);
+		squish();
 	    }
 	    // upper wall
 	    if(ball.y <= ballRadius) {
 		console.log('positive vector.y');
 		ballVector[1] = Math.abs(ballVector[1]);
+		squish();
 	    }
 	    // lower wall
 	    if(ball.y >= (fieldHeight - ballRadius)) {
 		console.log('negative vector.y');
 		ballVector[1] = -Math.abs(ballVector[1]);
+		squish();
 	    }
 	    console.log('player.number: ' + player.number + ', ball.x: ' + ball.x + ', ball.y: ' + ball.y + ', ballVector: ' + ballVector);
 	    ball.x += ballVector[0];
@@ -115,4 +119,11 @@ io.sockets.on('connection', function (socket) {
 	    players[1].socket.emit('ball-position', { 'x': ball.x, 'y': ball.y});
 	}
     }, 5);
+
+    function squish() {
+	console.log('squish');
+	players[0].socket.emit('squish');
+	players[1].socket.emit('squish');
+    }
+
 });

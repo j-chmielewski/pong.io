@@ -1,23 +1,22 @@
+var port = 8080;
+
 var app = require('http').createServer(handler)
 , io = require('socket.io').listen(app)
 , fs = require('fs');
-
 // logging
 io.set('log level', 1);
 
-app.listen(8080);
-
+app.listen(port);
 function handler (req, res) {
     fs.readFile(__dirname + '/index.html',
-		function (err, data) {
-		    if (err) {
-			res.writeHead(500);
-			return res.end('Error loading client.html');
-		    }
-
+	function (err, data) {
+	    if (err) {
+		res.writeHead(500);
+		return res.end('Error loading client.html');
+	    }
 		    res.writeHead(200);
-		    res.end(data);
-		});
+	    res.end(data);
+	});
 }
 
 // game params
@@ -29,6 +28,7 @@ var playerHeight = 100;
 
 var games = [[]];
 io.sockets.on('connection', function (socket) {
+    console.log('new player connection');
     var players;
     if(games[games.length - 1].length >= 2) {
 	players = [];
@@ -44,6 +44,7 @@ io.sockets.on('connection', function (socket) {
     players.push(player);
 
     // let player know his number
+    console.log('emiting player number: ' + player.number);
     socket.emit('player-number', player.number);
 
     // player sends position data
@@ -54,20 +55,20 @@ io.sockets.on('connection', function (socket) {
 	}
     });
 
-/*
+    /*
     // on disconnect
     socket.on('disconnect', function(data) {
-	if(players.length == 2) {
-    	    // let opponent know 
-    	    players[(player.number + 1) % 2].socket.emit('opponent-disconnected');
-	}
-	// remove from games
-	var i = games.indexOf(players);
-	games.splice(i);
-	// stop the ball
-	ballVector = [0, 0]
+    if(players.length == 2) {
+    // let opponent know 
+    players[(player.number + 1) % 2].socket.emit('opponent-disconnected');
+    }
+    // remove from games
+    var i = games.indexOf(players);
+    games.splice(i);
+    // stop the ball
+    ballVector = [0, 0]
     });
-*/
+    */
     // let the game begin...
     var ballVector = [2,1];
     ball = {

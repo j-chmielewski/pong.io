@@ -6,9 +6,9 @@
   
   <body>
     <script type="text/javascript">
-      var player = 0;
 
       // Config
+      var serverAddr = '127.0.0.1:8080';
       var pWidth = 800;
       var pHeight = 500;
       
@@ -18,8 +18,8 @@
       var ballColor = "#37cf23";
       var ballRadius = 20;
 
-      var server = '10.100.10.142:8080';
-      
+      var player = 0;
+
       // Create canvas
       var paper = Raphael(0, 0, pWidth, pHeight);
       
@@ -36,7 +36,7 @@
       ball.attr("fill", ballColor);
       
       // Socket
-      var socket = io.connect(server);
+      var socket = io.connect(serverAddr);
       socket.on('connect', function(){
 	  
 	  socket.on('player-number', function(data) {
